@@ -266,7 +266,7 @@ The above example command line took about 5 seconds to run on a Mac MacBook comp
 
 ## How to cite:
 
-Wen, Bo, et al. "[Assessment of false discovery rate control in tandem mass spectrometry analysis using entrapment.](https://doi.org/10.1101/2024.06.01.596967)" bioRxiv (2024): 2024-06.
+Wen, B., Freestone, J., Riffle, M. et al. [Assessment of false discovery rate control in tandem mass spectrometry analysis using entrapment](https://doi.org/10.1038/s41592-025-02719-x). *Nat Methods* (2025).
 
 
 
