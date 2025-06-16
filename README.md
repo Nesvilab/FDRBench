@@ -1,4 +1,4 @@
-# [FDRBench](https://doi.org/10.1101/2024.06.01.596967)
+# [FDRBench](https://www.nature.com/articles/s41592-025-02719-x)
 **FDRBench** is a tool for false discovery rate (FDR) control evaluation in proteomics. It provides two main functions: (1) build entrapment databases using randomly shuffled target sequences or using sequences from foreign species, and (2) estimate the false discovery proportion (FDP) using the lower bound, combined, and paired methods.
 
 ![Downloads](https://img.shields.io/github/downloads/Noble-Lab/FDRBench/total.svg) ![Release](https://img.shields.io/github/release/Noble-Lab/FDRBench.svg)![Downloads](https://img.shields.io/github/downloads/Noble-Lab/FDRBench/latest/total)
