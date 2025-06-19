@@ -3,7 +3,7 @@
 
 ![Downloads](https://img.shields.io/github/downloads/Noble-Lab/FDRBench/total.svg) ![Release](https://img.shields.io/github/release/Noble-Lab/FDRBench.svg)![Downloads](https://img.shields.io/github/downloads/Noble-Lab/FDRBench/latest/total)
 
-<img src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41592-025-02719-x/MediaObjects/41592_2025_2719_Fig1_HTML.png">
+[![FDRBench](https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41592-025-02719-x/MediaObjects/41592_2025_2719_Fig1_HTML.png)](https://www.nature.com/articles/s41592-025-02719-x/figures/1)
 
 
 ## Installation
