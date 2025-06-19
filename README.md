@@ -3,6 +3,9 @@
 
 ![Downloads](https://img.shields.io/github/downloads/Noble-Lab/FDRBench/total.svg) ![Release](https://img.shields.io/github/release/Noble-Lab/FDRBench.svg)![Downloads](https://img.shields.io/github/downloads/Noble-Lab/FDRBench/latest/total)
 
+<img src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41592-025-02719-x/MediaObjects/41592_2025_2719_Fig1_HTML.png">
+
+
 ## Installation
 
 FDRBench is written using Java and can be run on Windows, Mac OS and Linux. Only Java is required to be installed to run FDRBench. If java is not installed, please install Java by following the instruction at https://openjdk.org/install/ or https://www.oracle.com/java/technologies/downloads/. After java is installed, FDRBench can be downloaded at https://github.com/Noble-Lab/FDRBench/releases.
