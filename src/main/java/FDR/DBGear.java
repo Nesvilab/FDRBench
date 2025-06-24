@@ -1,16 +1,16 @@
 package main.java.FDR;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import static java.util.stream.Collectors.toList;
+
 import com.compomics.util.experiment.biology.enzymes.Enzyme;
 import com.compomics.util.experiment.biology.enzymes.EnzymeFactory;
 import com.compomics.util.parameters.identification.search.DigestionParameters;
 import com.compomics.util.pride.CvTerm;
+
 import main.java.util.Cloger;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 public class DBGear {
 
@@ -49,8 +49,37 @@ public class DBGear {
      */
     public static Enzyme getEnzymeByIndex(int ind){
 
-        ArrayList<Enzyme> enzymes = new ArrayList<>();
+        if(ind < 0 || ind > enzymes.size()){
+            System.err.println("Please provide a valid enzyme number:"+ind);
+            System.exit(0);
+        }
+        Cloger.getInstance().logger.info("Use enzyme:"+enzymes.get(ind).getName());
 
+        return(enzymes.get(ind));
+    }
+
+    public static int getEnzymeIndexByName(String enzyme_name){
+
+        int ind = -1;
+        for(int i=0;i<enzymes.size();i++){
+            if(enzymes.get(i).getName().equalsIgnoreCase(enzyme_name)){
+                ind = i;
+                break;
+            }
+        }
+        if(ind == -1){
+            System.err.println("Please provide a valid enzyme name:"+enzyme_name);
+            System.exit(0);
+        }else{
+            Cloger.getInstance().logger.info("Use enzyme:"+enzymes.get(ind).getName());
+        }
+        return ind;
+    }
+
+    private static ArrayList<Enzyme> enzymes = new ArrayList<>();
+
+    public static void init_enzymes(){
+        enzymes.clear();
         // 0 non-specific digestion
         Enzyme enzyme = new Enzyme("NoEnzyme");
         String all_aas = "ABCDEFGHIKLMNPQRSTUVWXY";
@@ -99,12 +128,10 @@ public class DBGear {
         enzyme.setCvTerm(new CvTerm("PSI-MS", "MS:1001309", "Lys-C", null));
         enzymes.add(enzyme);
 
-        if(ind < 0 || ind > enzymes.size()){
-            System.err.println("Please provide a valid enzyme number:"+ind);
-            System.exit(0);
-        }
-        Cloger.getInstance().logger.info("Use enzyme:"+enzymes.get(ind).getName());
-        return(enzymes.get(ind));
+        enzyme = new Enzyme("NoCut");
+        enzyme.addAminoAcidAfter('X');
+        enzymes.add(enzyme);
+        EnzymeFactory.getInstance().addEnzyme(enzyme);
     }
 
 

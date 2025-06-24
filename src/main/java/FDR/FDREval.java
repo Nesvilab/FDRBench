@@ -1,29 +1,48 @@
 package main.java.FDR;
 
-import com.compomics.util.experiment.biology.enzymes.Enzyme;
-import com.compomics.util.experiment.identification.protein_sequences.digestion.ExtendedPeptide;
-import com.compomics.util.experiment.identification.protein_sequences.digestion.IteratorFactory;
-import com.compomics.util.experiment.identification.protein_sequences.digestion.SequenceIterator;
-import com.compomics.util.parameters.identification.search.DigestionParameters;
-import main.java.util.Cloger;
-import net.sf.jfasta.FASTAElement;
-import net.sf.jfasta.FASTAFileReader;
-import net.sf.jfasta.impl.FASTAElementIterator;
-import net.sf.jfasta.impl.FASTAFileReaderImpl;
-import org.apache.commons.cli.*;
-import org.apache.commons.lang3.StringUtils;
-import tech.tablesaw.api.*;
-import tech.tablesaw.io.csv.CsvReadOptions;
-
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.StringUtils;
+
+import com.compomics.util.experiment.biology.enzymes.Enzyme;
+import com.compomics.util.experiment.identification.protein_sequences.digestion.ExtendedPeptide;
+import com.compomics.util.experiment.identification.protein_sequences.digestion.IteratorFactory;
+import com.compomics.util.experiment.identification.protein_sequences.digestion.SequenceIterator;
+import com.compomics.util.parameters.identification.search.DigestionParameters;
+
 import static main.java.FDR.DBGear.getDigestionPreferences;
 import static main.java.FDR.DBGear.getEnzymeByIndex;
+import main.java.util.Cloger;
+import net.sf.jfasta.FASTAElement;
+import net.sf.jfasta.FASTAFileReader;
+import net.sf.jfasta.impl.FASTAElementIterator;
+import net.sf.jfasta.impl.FASTAFileReaderImpl;
+import tech.tablesaw.api.ColumnType;
+import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.IntColumn;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.io.csv.CsvReadOptions;
 
 public class FDREval {
 
@@ -367,8 +386,13 @@ public class FDREval {
                 CParameter.maxMissedCleavages = 1;
             }
 
+            DBGear.init_enzymes();
             if(cmd.hasOption("enzyme")){
-                CParameter.enzyme = Integer.parseInt(cmd.getOptionValue("enzyme"));
+                if(cmd.getOptionValue("enzyme").equalsIgnoreCase("NoCut")){
+                    CParameter.enzyme = DBGear.getEnzymeIndexByName(cmd.getOptionValue("enzyme"));
+                }else {
+                    CParameter.enzyme = Integer.parseInt(cmd.getOptionValue("enzyme"));
+                }
             }else{
                 CParameter.enzyme = 2;
             }
@@ -620,6 +644,7 @@ public class FDREval {
 
         HashMap<String,ArrayList<String>> pep2proteins = new HashMap<>();
         DBGear dbGear = new DBGear();
+        boolean uniprot_format_w = false;
         int i = 0;
         while (it.hasNext()) {
             FASTAElement el = it.next();
@@ -629,13 +654,22 @@ public class FDREval {
             String proID = headLine[0];
             if(for_diann && for_uniprot) {
                 String [] acc_list = proID.split("\\|");
-                if (uniprot_accs.contains(acc_list[1])) {
-                    System.err.println("Duplicate accession number: " + acc_list[1]);
-                    acc_list[1] = acc_list[1] + "_i" + i;
-                    proID = StringUtils.join(acc_list, "|");
-                    System.err.println("Use accession number: " + acc_list[1]+", new ID:"+proID);
-                } else {
-                    uniprot_accs.add(acc_list[1]);
+                if(acc_list.length > 1) {
+                    if (uniprot_accs.contains(acc_list[1])) {
+                        System.err.println("Duplicate accession number: " + acc_list[1]);
+                        acc_list[1] = acc_list[1] + "_i" + i;
+                        proID = StringUtils.join(acc_list, "|");
+                        System.err.println("Use accession number: " + acc_list[1]+", new ID:"+proID);
+                    } else {
+                        uniprot_accs.add(acc_list[1]);
+                    }
+                }else{
+                    uniprot_format_w = true;
+                    if(uniprot_format_w){
+                        System.err.println("Warning: the input protein ID is not in Uniprot format: "+proID);
+                        uniprot_format_w = false;
+                    }
+                    uniprot_accs.add(proID);
                 }
             }
             String proSeq = el.getSequence();
@@ -947,6 +981,7 @@ public class FDREval {
         HashMap<String,ArrayList<String>> pep2proteins = new HashMap<>();
         DBGear dbGear = new DBGear();
         int i = 0;
+        boolean uniprot_format_w = false;
         while (it.hasNext()) {
             FASTAElement el = it.next();
             el.setLineLength(1);
@@ -955,13 +990,22 @@ public class FDREval {
             String proID = headLine[0];
             if(for_diann && for_uniprot) {
                 String [] acc_list = proID.split("\\|");
-                if (uniprot_accs.contains(acc_list[1])) {
-                    System.err.println("Duplicate accession number: " + acc_list[1]);
-                    acc_list[1] = acc_list[1] + "_i" + i;
-                    proID = StringUtils.join(acc_list, "|");
-                    System.err.println("Use accession number: " + acc_list[1]+", new ID:"+proID);
-                } else {
-                    uniprot_accs.add(acc_list[1]);
+                if(acc_list.length > 1){
+                    if (uniprot_accs.contains(acc_list[1])) {
+                        System.err.println("Duplicate accession number: " + acc_list[1]);
+                        acc_list[1] = acc_list[1] + "_i" + i;
+                        proID = StringUtils.join(acc_list, "|");
+                        System.err.println("Use accession number: " + acc_list[1]+", new ID:"+proID);
+                    } else {
+                        uniprot_accs.add(acc_list[1]);
+                    }
+                }else{
+                    uniprot_format_w = true;
+                    if(uniprot_format_w){
+                        System.err.println("Warning: the input protein ID is not in Uniprot format: "+proID);
+                        uniprot_format_w = false;
+                    }
+                    uniprot_accs.add(proID);
                 }
             }
             String proSeq = el.getSequence();
