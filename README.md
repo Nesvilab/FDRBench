@@ -31,9 +31,9 @@ usage: Options
  -prosit                   Generate Prosit input file
  -charge <arg>             For prosit input: charge range, 2,3,4
  -nce <arg>                For prosit input: NCE
- -enzyme <arg>             Enzyme used for protein digestion. 0:Non enzyme, 1:Trypsin, 2:Trypsin (no
+ -enzyme <arg>             Enzyme used for protein digestion. 0:Non-specific, 1:Trypsin, 2:Trypsin (no
                            P rule) (default), 3:Arg-C, 4:Arg-C (no P rule), 5:Arg-N, 6:Glu-C,
-                           7:Lys-C
+                           7:Lys-C, 8: NoCut
  -miss_c <arg>             The max missed cleavages, default is 1
  -minLength <arg>          The minimum length of peptide to consider, default is 7
  -maxLength <arg>          The maximum length of peptide to consider, default is 35
