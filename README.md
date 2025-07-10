@@ -144,6 +144,22 @@ CWTMDRTGAVEAVQVQAESAGLALTVLHLLKKTAGPVKCSLKYYMATPVDWTQQFSYVGHGKDAPGEEELDVMEGLGYLW
 
 The above example command line took about 10 seconds to run on a Mac MacBook computer.
 
+##### Build entrapment databases using foreign species - peptide level:
+
+Generate a **peptide level** entrapment database using the human target database `UP000005640_9606.fasta` (~20k human proteins) by taking peptides from *Arabidopsis thaliana* (`UP000002311_559292.fasta`) and *Saccharomyces cerevisiae* (`UP000006548_3702.fasta`) as entrapments. The database can be downloaded from [UniProt](https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000005640/UP000005640_9606.fasta.gz).
+
+```shell
+java -jar fdrbench-0.0.1.jar java -db UP000005640_9606.fasta -o UP000005640_9606_I2L_foreign_species_entrapment_peptide.txt -I2L -diann -uniprot -ms UP000002311_559292.fasta,UP000006548_3702.fasta -enzyme 2 -miss_c 1 -minLength 7 -maxLength 35 -level peptide -fold 1
+```
+
+##### Build entrapment databases using foreign species - protein level:
+
+Generate a **protein level** entrapment database using the human target database `UP000005640_9606.fasta` (~20k human proteins) by taking peptides from *Arabidopsis thaliana* (`UP000002311_559292.fasta`) and *Saccharomyces cerevisiae* (`UP000006548_3702.fasta`) as entrapments. The database can be downloaded from [UniProt](https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000005640/UP000005640_9606.fasta.gz).
+
+```shell
+java -jar fdrbench-0.0.1.jar java -db UP000005640_9606.fasta -o UP000005640_9606_I2L_foreign_species_entrapment_protein.fasta -I2L -diann -uniprot -ms UP000002311_559292.fasta,UP000006548_3702.fasta -enzyme 2 -miss_c 1 -minLength 7 -maxLength 35 -level protein -fold 1
+```
+
 #### FDP calculation
 
 ##### Peptide (or precursor) level FDR control evaluation
