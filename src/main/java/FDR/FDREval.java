@@ -2142,7 +2142,10 @@ public class FDREval {
             i++;
             String []headLine = el.getHeader().split("\\s+",2);
             String proID = headLine[0];
-            String desc = headLine[1];
+            String desc = "-";
+            if(headLine.length>=2){
+                desc = headLine[1];
+            }
             String proSeq = el.getSequence();
             if(I2L){
                 proSeq = proSeq.replaceAll("I","L");
