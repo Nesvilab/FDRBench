@@ -1774,7 +1774,15 @@ public class FDREval {
         String []res = new String[d.length];
         for(int i=0;i<d.length;i++) {
             String[] acc_list = d[i].split("\\|");
-            res[i] = acc_list[0] + "|" + acc_list[1] + n_fold_label + prefix + "|" + acc_list[2] + n_fold_label + prefix;
+            StringBuilder sb = new  StringBuilder();
+            sb.append(acc_list[0]).append("|");
+            for (int j = 1; j < acc_list.length; ++j) {
+              sb.append(acc_list[j]).append(n_fold_label).append(prefix);
+              if (j < acc_list.length - 1) {
+                sb.append("|");
+              }
+            }
+            res[i] = sb.toString();
         }
         return StringUtils.join(res, sep);
     }

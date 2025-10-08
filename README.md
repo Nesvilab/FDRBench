@@ -444,6 +444,7 @@ dev.off()
 
 <img width="450" height="450" alt="fdr-fdp" src="https://github.com/user-attachments/assets/38ad772b-ba62-4225-aac1-96c73f7b4f9c" />
 
+The dashed vertical line is at the 1% FDR threshold, as are the numbers reported in text in the figure.
 
 ## How to cite:
 
