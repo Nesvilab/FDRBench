@@ -3139,7 +3139,13 @@ public class FDREval {
                 // TODO: need to update this
                 pmatch.id = psm_table.row(i).getString("peptide") +"|"+ psm_table.row(i).getString("mod_peptide").length()+"|"+ psm_table.row(i).getInt("charge");
                 if(!target2label.isEmpty()){
-                    is_entrapment = target2label.get(pmatch.peptide).equals("p_target");
+                    if(target2label.containsKey(pmatch.peptide)){
+                        is_entrapment = target2label.get(pmatch.peptide).equals("p_target");
+                    }else{
+                        System.err.println("Error: peptide is not present in the peptide list file:"+pmatch.peptide+", "+pep_file);
+                        System.err.println("The number of peptides loaded from the input peptide list file:"+target2label.size());
+                        System.exit(1);
+                    }
                 }else{
                     // determine the type of peptide based on its protein
                     pmatch.protein = PEntrapment.format_pg(psm_table.row(i).getString("protein"),";","p_target",pick_one_protein_method);
